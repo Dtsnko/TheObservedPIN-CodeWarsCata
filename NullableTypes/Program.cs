@@ -82,6 +82,7 @@ namespace NullableTypes
             }
             foreach(string s in adjacentNumsList)
                 Console.WriteLine(s);
+            adjacentNumsList.Remove(" ");
             return adjacentNumsList;
             
             
@@ -93,6 +94,7 @@ namespace NullableTypes
             for (int i = 0; i < rows; i++)
             {
                 int indexOfSplitter = adjacentNumsList.IndexOf(" ");
+                Console.WriteLine(indexOfSplitter);
                 string[] tempArr = new string[indexOfSplitter];
                 for (int j = 0; j < indexOfSplitter; j++)
                     tempArr[j] = adjacentNumsList[j];
@@ -100,25 +102,25 @@ namespace NullableTypes
                 adjacentNumsStringArray[i] = tempArr;
             }
             List<string> pairNumsCombinations = new List<string>();
-            for (int i = 0; i < adjacentNumsStringArray.Length; i += 2)
+            for (int i = 0; i < adjacentNumsStringArray.Length; i += 2) //разбиваем по парам
             {
-                for (int j = 0; j < adjacentNumsStringArray[i].Length; j++)
+
+                for (int j = 0; j < adjacentNumsStringArray[i].Length; j++) //в кажой паре рядов делаем пары чисел
                 {
                     for (int s = 0; s < adjacentNumsStringArray[i + 1].Length; s++)
                     {
                         string result = adjacentNumsStringArray[i][j].ToString() + adjacentNumsStringArray[i + 1][s];
-                        //if (i + 3 == adjacentNumsStringArray.Length)
-                        //    for (int g = 0; g < adjacentNumsStringArray[i + 3].Length; g++)
-                        //    {
-                        //        pairNumsCombinations.Add(result + adjacentNumsStringArray[i + 3][g]);
-                        //        Console.WriteLine(g);
-                        //    }
-                                
-                        pairNumsCombinations.Add(result);
+                        if (i + 3 == adjacentNumsStringArray.Length) // если рядов не четное колличество, добавляем в конце все столбцы нечетного ряда
+                            for (int g = 0; g < adjacentNumsStringArray[i + 2].Length; g++)
+                                pairNumsCombinations.Add(result + adjacentNumsStringArray[i + 2][g]);
+                        else
+                            pairNumsCombinations.Add(result);
                     }
 
                 }
                 pairNumsCombinations.Add(" ");
+                if (i + 3 == adjacentNumsStringArray.Length)
+                    return pairNumsCombinations;
             }
             return pairNumsCombinations;
             
