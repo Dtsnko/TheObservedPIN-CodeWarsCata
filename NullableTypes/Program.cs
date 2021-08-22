@@ -8,21 +8,11 @@ namespace NullableTypes
 {
     class Program
     {
-        int n = 0;
-        int countedArray = 0;
         static void Main(string[] args)
         {
 
-            for (bool status = true; status != false;)
-            {
-                string s = Console.ReadLine();
-                if (s == "false")
-                    return;
-                else
-                    foreach (string str in ToDecimalDigit(s))
-                        Console.WriteLine(str);
-
-            }
+            while (1 > 0)
+                ToDecimalDigit(Console.ReadLine());
         }
         public static List<string> ToDecimalDigit(string observed)
         {
@@ -79,22 +69,19 @@ namespace NullableTypes
             if(observed.Length == 1)
             {
                 adjacentNumsList.Remove(" ");
+                foreach (string s in adjacentNumsList)
+                    Console.WriteLine(s);
                 return adjacentNumsList;
             }
             //Если пришло много чисел, перебираем варианты
-            string[][] adjacentNumsStringArray = new string[observed.Length][]; /*Преобразовываем в массив массивов строк для удобства обработки*/
-            for (int i = 0; i < observed.Length; i++)
+            int rows = observed.Length;
+            while (adjacentNumsList[0].Length != observed.Length)
             {
-                int indexOfSplitter = adjacentNumsList.IndexOf(" ");
-                string[] tempArr = new string[indexOfSplitter];
-                for (int j = 0; j < indexOfSplitter; j ++)
-                    tempArr[j] = adjacentNumsList[j];
-                adjacentNumsList.RemoveRange(0, indexOfSplitter + 1);
-                adjacentNumsStringArray[i] = tempArr;
+                adjacentNumsList = AddAllCombinations(adjacentNumsList, rows);
+                rows /= 2;
             }
-
-
-            AddAllCombinations(adjacentNumsList, observed.Length);
+            foreach(string s in adjacentNumsList)
+                Console.WriteLine(s);
             return adjacentNumsList;
             
             
@@ -113,20 +100,26 @@ namespace NullableTypes
                 adjacentNumsStringArray[i] = tempArr;
             }
             List<string> pairNumsCombinations = new List<string>();
-             for (int i = 0; i < adjacentNumsStringArray.Length; i += 2)
+            for (int i = 0; i < adjacentNumsStringArray.Length; i += 2)
+            {
                 for (int j = 0; j < adjacentNumsStringArray[i].Length; j++)
                 {
+                    for (int s = 0; s < adjacentNumsStringArray[i + 1].Length; s++)
+                    {
+                        string result = adjacentNumsStringArray[i][j].ToString() + adjacentNumsStringArray[i + 1][s];
+                        //if (i + 3 == adjacentNumsStringArray.Length)
+                        //    for (int g = 0; g < adjacentNumsStringArray[i + 3].Length; g++)
+                        //    {
+                        //        pairNumsCombinations.Add(result + adjacentNumsStringArray[i + 3][g]);
+                        //        Console.WriteLine(g);
+                        //    }
+                                
+                        pairNumsCombinations.Add(result);
+                    }
 
-                        for (int s = 0; s < adjacentNumsStringArray[i + 1].Length; s++)
-                        {
-                            string result = adjacentNumsStringArray[i][j].ToString() + adjacentNumsStringArray[i + 1][s];
-                            pairNumsCombinations.Add(result);
-                        }
-                        pairNumsCombinations.Add(" ");
                 }
-                
-            foreach(string s in pairNumsCombinations)
-                Console.WriteLine(s);
+                pairNumsCombinations.Add(" ");
+            }
             return pairNumsCombinations;
             
         }
