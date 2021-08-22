@@ -73,51 +73,61 @@ namespace NullableTypes
                 catch { }
                 adjacentNumsList.Add(" ");
             }
-            string result = "";
+
             while (adjacentNumsList.Contains("-1"))
                 adjacentNumsList.Remove("-1");
-            foreach (string i in adjacentNumsList)
-                result += i;
-            result = result.Trim();
-            string[] adjacentNumsStringArray = result.Split(" ");
-            char[][] adjacentNumsCharArray = new char[adjacentNumsStringArray.Length][];
-            adjacentNumsList.Clear();
-            for (int i = 0; i < adjacentNumsCharArray.Length; i++)
-                adjacentNumsCharArray[i] = adjacentNumsStringArray[i].ToCharArray();
-            if (adjacentNumsCharArray.Length == 1)
+            if(observed.Length == 1)
             {
-                for (int i = 0; i < adjacentNumsCharArray.Length; i++)
-                    for (int j = 0; j < adjacentNumsCharArray[i].Length; j++)
-                        adjacentNumsList.Add(adjacentNumsCharArray[i][j].ToString());
+                adjacentNumsList.Remove(" ");
                 return adjacentNumsList;
             }
             //Если пришло много чисел, перебираем варианты
-           for(int i = 0; i < adjacentNumsCharArray.Length; i++)
-                for(int g = 0; g < adjacentNumsCharArray[i].Length; g++)
-                    
+            string[][] adjacentNumsStringArray = new string[observed.Length][]; /*Преобразовываем в массив массивов строк для удобства обработки*/
+            for (int i = 0; i < observed.Length; i++)
+            {
+                int indexOfSplitter = adjacentNumsList.IndexOf(" ");
+                string[] tempArr = new string[indexOfSplitter];
+                for (int j = 0; j < indexOfSplitter; j ++)
+                    tempArr[j] = adjacentNumsList[j];
+                adjacentNumsList.RemoveRange(0, indexOfSplitter + 1);
+                adjacentNumsStringArray[i] = tempArr;
+            }
+
+
+            AddAllCombinations(adjacentNumsList, observed.Length);
             return adjacentNumsList;
             
             
             
         }
-        static void AddAllCombinations(string[][] nums)
+        static List<string> AddAllCombinations(List<string> adjacentNumsList, int rows)
         {
-            List<string> pairNumsCombinations = new List<string>();
-            int iterator = nums.Length / 2;
-            for(int i = 0; i < nums.Length; i += 2)
+            string[][] adjacentNumsStringArray = new string[rows][]; /*Преобразовываем в массив массивов строк для удобства обработки*/
+            for (int i = 0; i < rows; i++)
             {
-                for (int j = 0; j < nums[i].Length; j++)
-                    for (int s = 0; s < nums[i + 1].Length; s++)
-                    {
-                        string result = nums[i][j].ToString() + nums[i + 1][s];
-                        pairNumsCombinations.Add(result);
-                    }
-                pairNumsCombinations.Add(" ");
-
+                int indexOfSplitter = adjacentNumsList.IndexOf(" ");
+                string[] tempArr = new string[indexOfSplitter];
+                for (int j = 0; j < indexOfSplitter; j++)
+                    tempArr[j] = adjacentNumsList[j];
+                adjacentNumsList.RemoveRange(0, indexOfSplitter + 1);
+                adjacentNumsStringArray[i] = tempArr;
             }
+            List<string> pairNumsCombinations = new List<string>();
+             for (int i = 0; i < adjacentNumsStringArray.Length; i += 2)
+                for (int j = 0; j < adjacentNumsStringArray[i].Length; j++)
+                {
+
+                        for (int s = 0; s < adjacentNumsStringArray[i + 1].Length; s++)
+                        {
+                            string result = adjacentNumsStringArray[i][j].ToString() + adjacentNumsStringArray[i + 1][s];
+                            pairNumsCombinations.Add(result);
+                        }
+                        pairNumsCombinations.Add(" ");
+                }
+                
             foreach(string s in pairNumsCombinations)
                 Console.WriteLine(s);
-            
+            return pairNumsCombinations;
             
         }
     }
